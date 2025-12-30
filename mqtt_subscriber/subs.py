@@ -3,7 +3,7 @@ import paho.mqtt.client as mqtt
 import mysql.connector
 import requests
 
-# ThingSpeak
+#  for ThingSpeak
 THINGSPEAK_API = "L3HNCJGGG0NXYU9K"
 
 # MySQL Connection
@@ -22,7 +22,7 @@ def on_message(client, userdata, msg):
     humidity = data['humidity']
     gas = data['gas']
 
-    # Insert into MySQL
+    # data inserted into MySQL
     sql = """INSERT INTO parameter
              (temperature, humidity, gas_level)
              VALUES (%s, %s, %s)"""
@@ -31,7 +31,7 @@ def on_message(client, userdata, msg):
 
     print("Inserted:", temperature, humidity, gas)
 
-    # Send to ThingSpeak
+    #this Sends data to ThingSpeak
     url = (
         f"https://api.thingspeak.com/update?"
         f"api_key={THINGSPEAK_API}"
@@ -41,7 +41,6 @@ def on_message(client, userdata, msg):
     )
     requests.get(url)
 
-# MQTT Client (NEW API – NO WARNING)
 client = mqtt.Client(mqtt.CallbackAPIVersion.VERSION2)
 
 client.connect("test.mosquitto.org", 1883, 60)
